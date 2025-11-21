@@ -9,7 +9,8 @@ import {
   Moon,
   BookOpen,
   ScrollText,
-  Banknote
+  Banknote,
+  ClipboardList
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -22,6 +23,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, isMobileOpen, setIsMobileOpen }) => {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'registrations', label: 'Registrations', icon: ClipboardList },
     { id: 'students', label: 'Students', icon: Users },
     { id: 'teachers', label: 'Teachers', icon: BookOpen },
     { id: 'attendance', label: 'Attendance', icon: CalendarCheck },
@@ -44,15 +46,16 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, isMobileOpen
       {/* Sidebar Container */}
       <div className={`
         fixed top-0 left-0 h-full w-64 bg-emerald-900 text-white z-30 transform transition-transform duration-300 ease-in-out shadow-2xl
+        dark:bg-slate-800 dark:border-r dark:border-slate-700
         ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static
       `}>
-        <div className="p-6 flex items-center gap-3 border-b border-emerald-800">
+        <div className="p-6 flex items-center gap-3 border-b border-emerald-800 dark:border-slate-700">
           <div className="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center shadow-lg shadow-amber-500/20">
              <Moon className="w-6 h-6 text-emerald-900 fill-current" />
           </div>
           <div>
             <h1 className="font-serif text-xl font-bold text-amber-400">Noor ul Masajid</h1>
-            <p className="text-xs text-emerald-200">Education System</p>
+            <p className="text-xs text-emerald-200 dark:text-slate-400">Education System</p>
           </div>
         </div>
 
@@ -70,11 +73,11 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, isMobileOpen
                 className={`
                   w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
                   ${isActive 
-                    ? 'bg-emerald-800 text-amber-400 shadow-inner border-l-4 border-amber-400' 
-                    : 'text-emerald-100 hover:bg-emerald-800/50 hover:text-white'}
+                    ? 'bg-emerald-800 dark:bg-emerald-600/20 text-amber-400 dark:text-emerald-400 shadow-inner border-l-4 border-amber-400 dark:border-emerald-400' 
+                    : 'text-emerald-100 dark:text-slate-300 hover:bg-emerald-800/50 dark:hover:bg-slate-700 hover:text-white dark:hover:text-slate-100'}
                 `}
               >
-                <Icon className={`w-5 h-5 ${isActive ? 'drop-shadow-md fill-current' : ''}`} />
+                <Icon className={`w-5 h-5 ${isActive ? 'drop-shadow-md' : ''}`} />
                 <span className="font-medium">{item.label}</span>
               </button>
             );

@@ -119,6 +119,29 @@ export interface Announcement {
   isUrgent: boolean;
 }
 
+// New Registration Module
+export enum ApplicationStatus {
+  PENDING = 'Pending',
+  APPROVED = 'Approved',
+  REJECTED = 'Rejected'
+}
+
+export interface Registration {
+  id: string;
+  fullName: string;
+  bForm: string;
+  fatherName: string;
+  fatherCnic: string;
+  address: string;
+  contactNumber: string;
+  track: AcademicTrack;
+  className: string;
+  photoUrl?: string;
+  applicationDate: string;
+  status: ApplicationStatus;
+}
+
+
 // Constants for Dropdowns
 export const DARS_E_NIZAMI_CLASSES = [
   "Mutawassitah",

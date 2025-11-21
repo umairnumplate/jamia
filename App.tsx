@@ -12,23 +12,25 @@ import TanzimModule from './components/TanzimModule';
 import MadrasaFees from './components/MadrasaFees';
 import Login from './components/Login';
 import RegistrationList from './components/RegistrationList';
-import { Student, Teacher, AttendanceRecord, Announcement, TanzimRecord, MadrasaFeeRecord, Registration, StudentStatus, ApplicationStatus, AcademicTrack } from './types';
+import { Student, Teacher, AttendanceRecord, Announcement, TanzimRecord, MadrasaFeeRecord, Registration, StudentStatus, ApplicationStatus, AcademicTrack, DARS_E_NIZAMI_CLASSES, HIFZ_LEVELS, CertificateStatus } from './types';
 
 // Helper to mock initial data if local storage is empty
 const INITIAL_STUDENTS: Student[] = [
-  { 
-    id: '1', 
-    fullName: 'Ahmed Ali', 
-    bForm: '12345-1234567-1', 
-    fatherName: 'Ali Raza', 
-    fatherCnic: '345', 
-    address: 'Lahore', 
-    contactNumber: '923001234567', 
-    track: AcademicTrack.HIFZ, 
-    className: 'Hifz Ibtidai', 
-    status: StudentStatus.ACTIVE 
-  },
+  { id: '1', fullName: 'Ahmed Ali', bForm: '12345-1234567-1', fatherName: 'Ali Raza', fatherCnic: '35201-1111111-1', address: 'Main Bazar, Lahore', contactNumber: '923001234567', track: AcademicTrack.HIFZ, className: 'Hifz Ibtidai', status: StudentStatus.ACTIVE, photoUrl: '' },
+  { id: '2', fullName: 'Fatima Zahra', bForm: '12345-1234567-2', fatherName: 'Hassan Iqbal', fatherCnic: '35201-2222222-2', address: 'Model Town, Lahore', contactNumber: '923217654321', track: AcademicTrack.DARS_E_NIZAMI, className: 'Aammah Awwal', status: StudentStatus.ACTIVE, photoUrl: '' },
+  { id: '3', fullName: 'Usman Ghani', bForm: '12345-1234567-3', fatherName: 'Bashir Ahmed', fatherCnic: '35201-3333333-3', address: 'Johar Town, Lahore', contactNumber: '923339876543', track: AcademicTrack.HIFZ, className: 'Hifz Mukammal', status: StudentStatus.ACTIVE, photoUrl: '' },
+  { id: 'g1', fullName: 'Zain Abdullah', bForm: '98765-4321098-1', fatherName: 'Abdullah Khan', fatherCnic: '35201-4444444-4', address: 'Gulberg, Lahore', contactNumber: '923011122334', track: AcademicTrack.DARS_E_NIZAMI, className: 'Graduated', status: StudentStatus.GRADUATED, graduationDate: '2023-05-20', completedLevels: DARS_E_NIZAMI_CLASSES, certificateStatus: CertificateStatus.RECEIVED, certificateDetails: "Excellent performance, Grade A+." },
 ];
+
+const INITIAL_TEACHERS: Teacher[] = [
+  { id: 't1', name: 'Qari Hammad', qualification: 'Qari, Tajweed Expert', contactNumber: '923005556667', assignments: [{ id: 'ta1', className: 'Hifz Ibtidai', subject: 'Hifz', startTime: '08:00', endTime: '10:00', dayOfWeek: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'] }] },
+  { id: 't2', name: 'Mufti Tariq', qualification: 'Mufti, Dars-e-Nizami', contactNumber: '923218889990', assignments: [{ id: 'ta2', className: 'Aammah Awwal', subject: 'Fiqh', startTime: '10:00', endTime: '11:30', dayOfWeek: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'] }] },
+];
+
+const INITIAL_REGISTRATIONS: Registration[] = [
+    { id: 'r1', fullName: 'Bilal Khan', bForm: '11111-2222222-3', fatherName: 'Imran Khan', fatherCnic: '35201-5555555-5', address: 'Faisal Town, Lahore', contactNumber: '923451212121', track: AcademicTrack.HIFZ, className: 'Hifz Ibtidai', applicationDate: new Date().toISOString().split('T')[0], status: ApplicationStatus.PENDING },
+];
+
 
 const App: React.FC = () => {
   // UI State
@@ -42,7 +44,12 @@ const App: React.FC = () => {
     const [storedValue, setStoredValue] = useState<T>(() => {
       try {
         const item = window.localStorage.getItem(key);
-        return item ? JSON.parse(item) : initialValue;
+        // Add a check to see if the storage is empty, if so, use initialValue
+        if (item === null) {
+          window.localStorage.setItem(key, JSON.stringify(initialValue));
+          return initialValue;
+        }
+        return JSON.parse(item);
       } catch (error) {
         console.error(error);
         return initialValue;
@@ -62,12 +69,12 @@ const App: React.FC = () => {
   };
 
   const [students, setStudents] = useLocalStorage<Student[]>('students', INITIAL_STUDENTS);
-  const [teachers, setTeachers] = useLocalStorage<Teacher[]>('teachers', []);
+  const [teachers, setTeachers] = useLocalStorage<Teacher[]>('teachers', INITIAL_TEACHERS);
   const [attendanceRecords, setAttendanceRecords] = useLocalStorage<AttendanceRecord[]>('attendance', []);
   const [announcements, setAnnouncements] = useLocalStorage<Announcement[]>('announcements', []);
   const [tanzimRecords, setTanzimRecords] = useLocalStorage<TanzimRecord[]>('tanzimRecords', []);
   const [madrasaFeeRecords, setMadrasaFeeRecords] = useLocalStorage<MadrasaFeeRecord[]>('madrasaFeeRecords', []);
-  const [registrations, setRegistrations] = useLocalStorage<Registration[]>('registrations', []);
+  const [registrations, setRegistrations] = useLocalStorage<Registration[]>('registrations', INITIAL_REGISTRATIONS);
 
   // Theme effect
   useEffect(() => {
